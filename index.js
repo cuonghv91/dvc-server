@@ -89,7 +89,9 @@ app.post("/dataset-upload", upload, function (req, res, next) {
 });
 
 app.post("/name-data-set", async function (req, res) {
-  currentFolder = `${basePath}${req.body.repoName}/${req.body.nameDataset}`;
+  currentFolder = `${basePath}${req.body.repoName}/${req.body.nameDataset
+    .split(" ")
+    .join("-")}`;
   datasetName = req.body.nameDataset;
   try {
     if (
