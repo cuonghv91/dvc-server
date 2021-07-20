@@ -53,11 +53,11 @@ var upload = multer({ storage: storage }).array("file", 100000);
 
 app.get("/dataset", function (req, res, next) {
   let result = [];
-  let files = fs.readdirSync("./fuck-ass");
+  let files = fs.readdirSync(`./${APP_DATA_DIR}`);
   files = files.filter((item) => item.indexOf(".") === -1);
 
   files.forEach((item) => {
-    let inner = fs.readdirSync(`./fuck-ass/${item}`);
+    let inner = fs.readdirSync(`./${APP_DATA_DIR}/${item}`);
     result.push({
       datasetName: item,
       list: inner,
@@ -75,7 +75,10 @@ app.post("/dataset-upload", upload, function (req, res, next) {
       fs.mkdirSync(`${basePath}/upload`);
     }
 
-    await runInit(`./${APP_DATA_DIR}`, `dvc add ${datasetName}`);
+    await runInit(
+      `./${APP_DATA_DIR}`,
+      `dvc add ${datasetName.split(" ").join("-")}`
+    );
     await runInit(`./${APP_DATA_DIR}`, `git add .`);
     await runInit(`./${APP_DATA_DIR}`, `git commit -m "Add ${datasetName}"`);
     await runInit(`./${APP_DATA_DIR}`, `git push origin master`);
