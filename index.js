@@ -75,10 +75,7 @@ app.post("/dataset-upload", upload, function (req, res, next) {
       fs.mkdirSync(`${basePath}/upload`);
     }
 
-    await runInit(
-      `./${APP_DATA_DIR}`,
-      `dvc add ${datasetName.split(" ").join("-")}`
-    );
+    await runInit(`./${APP_DATA_DIR}`, `dvc add ${datasetName}`);
     await runInit(`./${APP_DATA_DIR}`, `git add .`);
     await runInit(`./${APP_DATA_DIR}`, `git commit -m "Add ${datasetName}"`);
     await runInit(`./${APP_DATA_DIR}`, `git push origin master`);
@@ -89,9 +86,7 @@ app.post("/dataset-upload", upload, function (req, res, next) {
 });
 
 app.post("/name-data-set", async function (req, res) {
-  currentFolder = `${basePath}${req.body.repoName}/${req.body.nameDataset
-    .split(" ")
-    .join("-")}`;
+  currentFolder = `${basePath}${req.body.repoName}/${req.body.nameDataset}`;
   datasetName = req.body.nameDataset;
   try {
     if (
